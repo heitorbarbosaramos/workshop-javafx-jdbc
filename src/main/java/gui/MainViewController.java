@@ -7,6 +7,7 @@ import gui.util.LoadView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
+import model.services.DepartmentService;
 
 public class MainViewController  implements Initializable{
 
@@ -26,13 +27,16 @@ public class MainViewController  implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartmentAction() {
-		loadView.loadView2("/gui/DepartmentList.fxml");
+		loadView.loadView("/gui/DepartmentList.fxml",(DepartmentListController controller) ->{
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateTableView();
+		});
 		System.out.println("onMenuItemDepartmentAction");
 	}
 	
 	@FXML
 	public void onMenuItemAboutAction() {
-		loadView.loadView("/gui/About.fxml");
+		loadView.loadView("/gui/About.fxml",x -> {});
 		System.out.println("onMenuItemAboutAction");
 	}
 	
