@@ -26,7 +26,7 @@ public class MainViewController  implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartmentAction() {
-		loadView.loadView("/gui/DepartmentList.fxml");
+		loadView.loadView2("/gui/DepartmentList.fxml");
 		System.out.println("onMenuItemDepartmentAction");
 	}
 	
@@ -36,7 +36,7 @@ public class MainViewController  implements Initializable{
 		System.out.println("onMenuItemAboutAction");
 	}
 	
-	public void initialize(URL uri, ResourceBundle rb) {	
+	public void initialize(URL url, ResourceBundle rb) {	
 	}
 	
 	
