@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import gui.util.Alerts;
+import javafx.scene.control.Alert.AlertType;
+
 public class DB {
 
 	private static Connection conn = null;
@@ -21,6 +24,7 @@ public class DB {
 				conn = DriverManager.getConnection(url, props);
 			}
 			catch (SQLException e) {
+				Alerts.showAlert("Bank Access" , "Bank Access", e.getMessage(), AlertType.INFORMATION);
 				throw new DbException(e.getMessage());
 			}
 		}
