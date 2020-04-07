@@ -1,23 +1,29 @@
 package gui;
 
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.mysql.cj.util.Util;
+
+import db.DbException;
 import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import model.entities.Department;
+import model.services.DepartmentService;
 
-public class DepartmentFormController implements Initializable{
+public class DepartmentFormController implements Initializable {
 
 	private Department entity;
-	
+	private DepartmentService service;
+
 	@FXML
 	private TextField txtId;
 	@FXML
@@ -30,31 +36,60 @@ public class DepartmentFormController implements Initializable{
 	private Button btCancel;
 
 	@FXML
-	public void onBtSaveAction() {
+	public void onBtSaveAction(ActionEvent event) {
+
+		if (entity == null) {
+			throw new IllegalStateException("Entity was null");
+		}
+
+		if (service == null) {
+			throw new IllegalStateException("Service was null");
+		}
+
+		try {
+			entity = getFormdata();
+			service.saveOrUpdate(entity);
+			Utils.currentStage(event).close();
+		} catch (DbException e) {
+			Alerts.showAlert("Error Saving Object", "Error Saving Object", e.getMessage(), AlertType.ERROR);
+		}
 		System.out.println("onBtSaveAction");
 	}
+
+	private Department getFormdata() {
+		Department obj = new Department();
+		obj.setId(Utils.tryParseToInt(txtId.getText()));
+		obj.setName(txtName.getText());
+		return obj;
+	}
+
 	@FXML
-	public void onBtCanelAction() {
+	public void onBtCanelAction(ActionEvent event) {
+		Utils.currentStage(event).close();
 		System.out.println("onBtCanelAction");
 	}
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
 	}
-	
+
 	public void initializeNodes() {
 		Constraints.setTextFieldInteger(txtId);
 		Constraints.setTextFieldMaxLength(txtName, 30);
 	}
-	
+
 	public void setDepartment(Department entity) {
 		this.entity = entity;
 	}
-	
+
+	public void setDepartmentService(DepartmentService service) {
+		this.service = service;
+	}
+
 	public void updateFormData() {
-		
-		if(entity == null) {
+
+		if (entity == null) {
 			Alerts.showAlert("Entity was null", "Entity was null", "Entity was null", AlertType.INFORMATION);
 			throw new IllegalStateException("Entity was null");
 		}
