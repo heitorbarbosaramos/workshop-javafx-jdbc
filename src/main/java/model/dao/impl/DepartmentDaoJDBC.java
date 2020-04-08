@@ -10,6 +10,8 @@ import java.util.List;
 
 import db.DB;
 import db.DbException;
+import gui.util.Alerts;
+import javafx.scene.control.Alert.AlertType;
 import model.dao.DepartmentDao;
 import model.entities.Department;
 
@@ -86,6 +88,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 			
 			if(rowsAffcted > 0 ) {System.out.println("\n\n\t delete success");}else{System.out.println("\n\n\t delete failed");}
 		} catch (SQLException e) {
+			Alerts.showAlert("Delete Faill", "Delete Faill", e.getMessage(), AlertType.ERROR);
 			throw new DbException(e.getMessage());
 		}
 		
