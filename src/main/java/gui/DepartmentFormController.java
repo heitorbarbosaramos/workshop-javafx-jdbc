@@ -1,11 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import com.mysql.cj.util.Util;
-
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -23,7 +24,8 @@ public class DepartmentFormController implements Initializable {
 
 	private Department entity;
 	private DepartmentService service;
-
+	private List<DataChangeListener> dataChangerListerner = new ArrayList<DataChangeListener>();
+	
 	@FXML
 	private TextField txtId;
 	@FXML
@@ -49,13 +51,32 @@ public class DepartmentFormController implements Initializable {
 		try {
 			entity = getFormdata();
 			service.saveOrUpdate(entity);
+			notifyDataChangerListeners();
 			Utils.currentStage(event).close();
 		} catch (DbException e) {
 			Alerts.showAlert("Error Saving Object", "Error Saving Object", e.getMessage(), AlertType.ERROR);
 		}
 		System.out.println("onBtSaveAction");
 	}
+	
 
+
+	private void notifyDataChangerListeners() {
+		for(DataChangeListener listeners : dataChangerListerner) {
+			listeners.onDataChanged();
+		}
+		
+	}
+
+
+
+	@FXML
+	public void onBtCanelAction(ActionEvent event) {
+		Utils.currentStage(event).close();
+		System.out.println("onBtCanelAction");
+	}
+	
+	
 	private Department getFormdata() {
 		Department obj = new Department();
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
@@ -63,11 +84,7 @@ public class DepartmentFormController implements Initializable {
 		return obj;
 	}
 
-	@FXML
-	public void onBtCanelAction(ActionEvent event) {
-		Utils.currentStage(event).close();
-		System.out.println("onBtCanelAction");
-	}
+	
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -87,6 +104,9 @@ public class DepartmentFormController implements Initializable {
 		this.service = service;
 	}
 
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangerListerner.add(listener);
+	}
 	public void updateFormData() {
 
 		if (entity == null) {
@@ -96,5 +116,7 @@ public class DepartmentFormController implements Initializable {
 		txtId.setText(String.valueOf(entity.getId()));
 		txtName.setText(entity.getName());
 	}
+
+
 
 }
