@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 import model.services.DepartmentService;
+import model.services.SellerService;
 
 public class MainViewController  implements Initializable{
 
@@ -22,6 +23,10 @@ public class MainViewController  implements Initializable{
 	
 	@FXML
 	public void onMenuItemSellerAction() {
+		loadView.loadView("/gui/SellerList.fxml",(SellerListController controller) ->{
+			controller.setSellerService(new SellerService());
+			controller.updateTableView();
+		});
 		System.out.println("onMenuItemSellerAction");
 	}
 	
