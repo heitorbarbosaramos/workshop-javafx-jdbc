@@ -27,8 +27,16 @@ public class Utils {
 		try {
 			return Integer.parseInt(str);
 		} catch (NumberFormatException e) {
-			Alerts.showAlert("Number Exceptio", "Number Exceptio", "Parameter passed cannot be a number",
-					AlertType.INFORMATION);
+			Alerts.showAlert("Number Exceptio", "Number Exceptio",e.getMessage(),AlertType.INFORMATION);
+			return null;
+		}
+	}
+	
+	public static Double tryParseToDouble(String str) {
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			Alerts.showAlert("Number Exceptio", "Number Exceptio", e.getMessage(),AlertType.INFORMATION);
 			return null;
 		}
 	}
